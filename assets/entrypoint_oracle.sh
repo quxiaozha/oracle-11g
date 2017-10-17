@@ -87,11 +87,17 @@ change_dpdump_dir () {
 	while read line; do echo -e "sqlplus: $line"; done
 }
 
+start_ssh () {
+	echo_yellow "Starting ssh..."
+	echo 'hundsun' |sudo -S /usr/sbin/sshd
+}
+
 chmod 777 /opt/oracle/dpdump
 
 echo "Checking shared memory..."
 df -h | grep "Mounted on" && df -h | egrep --color "^.*/dev/shm" || echo "Shared memory is not mounted."
 if [ ! -f $pfile ]; then
   create_db;
-fi 
+fi
+start_ssh 
 start_db
