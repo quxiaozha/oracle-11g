@@ -1,5 +1,8 @@
 FROM centos:7
-MAINTAINER jaspeen
+
+#基于https://github.com/jaspeen/oracle-11g
+#https://github.com/quxiaozha/oracle-11g/
+MAINTAINER quxiaozha
 
 ADD assets /assets
 
@@ -8,7 +11,7 @@ RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
   && echo 'Asia/Shanghai' >/etc/timezone \
   && mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup \
   && curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo \
-  && yum makecache \
+  && yum clean all \
   && chmod -R 755 /assets \
   && /assets/setup.sh
 
