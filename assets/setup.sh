@@ -20,6 +20,7 @@ users () {
 	groupadd -g 200 oinstall
 	groupadd -g 201 dba
 	useradd -u 440 -g oinstall -G dba -d /opt/oracle oracle
+	echo "oracle   ALL=(ALL)      NOPASSWD:ALL" >> /etc/sudoers 
 	echo "oracle:install" | chpasswd
 	echo "root:install" | chpasswd
 	sed -i "s/pam_namespace.so/pam_namespace.so\nsession    required     pam_limits.so/g" /etc/pam.d/login
@@ -39,6 +40,19 @@ sysctl_and_limits () {
 
 }
 
+ssh () {
+	echo "Installing ssh"
+	yum install -y openssh-server openssh-clients sudo
+	sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
+	ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -N ""
+	ssh-keygen -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key -N ""
+	ssh-keygen -t ed25519 -f /etc/ssh/ssh_host_ed25519_key -N ""
+	systemctl enable sshd.service
+	yum clean all
+	rm -rf /var/lib/{cache,log} /var/log/lastlog
+}
+
 deps
+ssh
 users
 sysctl_and_limits
