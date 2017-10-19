@@ -89,7 +89,7 @@ change_dpdump_dir () {
 
 start_ssh () {
 	echo_yellow "Starting ssh..."
-	echo 'hundsun' |sudo -S /usr/sbin/sshd
+	echo 'install' |sudo -S /usr/sbin/sshd
 }
 
 chmod 777 /opt/oracle/dpdump
